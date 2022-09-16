@@ -6,7 +6,6 @@ import com.lws.rawrblogend.service.UserService;
 import com.lws.rawrblogend.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,8 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable() // CSRF禁用，因为不使用session
                 .authorizeRequests() // 限定通过签名的请求
                 .antMatchers(CREATE_TOKEN_URL).permitAll() // 设置该请求可以直接访问
-                .antMatchers(HttpMethod.POST, "/users/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/files/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/files/**").permitAll()
+                .antMatchers("/blogs/**").permitAll()
                 .anyRequest().authenticated() // 表示除了上面定义的URL模式之外，用户访问其他URL都必须认证后访问(登录后访问)
                 .and()
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userService, redisUtils)) // 添加权限过滤器

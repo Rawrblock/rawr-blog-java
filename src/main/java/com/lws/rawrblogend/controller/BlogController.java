@@ -1,6 +1,8 @@
 package com.lws.rawrblogend.controller;
 
-import com.lws.rawrblogend.dto.BlogCreateRequest;
+import com.lws.rawrblogend.dto.BlogCreateOrUpdateRequest;
+import com.lws.rawrblogend.dto.BlogDto;
+import com.lws.rawrblogend.dto.BlogPageNumber;
 import com.lws.rawrblogend.mapper.BlogMapper;
 import com.lws.rawrblogend.service.BlogService;
 import com.lws.rawrblogend.vo.BlogVo;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/blogs")
@@ -18,13 +21,24 @@ public class BlogController {
     private BlogMapper blogMapper;
 
     @PostMapping("/")
-    private BlogVo create(@RequestBody BlogCreateRequest blogCreateRequest) {
-        return blogMapper.toVo(blogService.create(blogCreateRequest));
+    public BlogVo create(@RequestBody BlogCreateOrUpdateRequest blogCreateOrUpdateRequest) {
+        return blogMapper.toVo(blogService.create(blogCreateOrUpdateRequest));
+    }
+
+    @PostMapping("/{id}")
+    public BlogVo update(@PathVariable String id, @RequestBody BlogCreateOrUpdateRequest blogCreateOrUpdateRequest) {
+        return blogMapper.toVo(blogService.update(id, blogCreateOrUpdateRequest));
     }
 
     @GetMapping("/")
-    private List<BlogVo> list() {
-        return null;
+    public List<BlogVo> list(BlogPageNumber blogPageNumber) {
+        List<BlogDto> blogs = blogService.getAllBlogs(blogPageNumber);
+        return blogs.stream().map(blogMapper::toVo).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public BlogVo getBlog(@PathVariable String id) {
+        return blogMapper.toVo(blogService.getBlog(id));
     }
 
     @Autowired

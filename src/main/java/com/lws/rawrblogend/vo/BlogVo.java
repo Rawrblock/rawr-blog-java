@@ -3,7 +3,7 @@ package com.lws.rawrblogend.vo;
 import lombok.Data;
 
 @Data
-public class BlogVo {
+public class BlogVo extends BaseVo {
 
     private String id;
 

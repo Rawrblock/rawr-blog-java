@@ -2,6 +2,8 @@ package com.lws.rawrblogend.dto;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class BlogDto {
 
@@ -12,4 +14,6 @@ public class BlogDto {
     private String content;
 
     private FileDto cover;
+
+    private Date createdTime;
 }

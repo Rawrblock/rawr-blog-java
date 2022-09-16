@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 public abstract class BaseVo {
-    
+
     private String id;
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyyMMddHHmmss")

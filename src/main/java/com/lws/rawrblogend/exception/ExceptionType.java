@@ -15,7 +15,8 @@ public enum ExceptionType {
     USER_NOT_ENABLED(50001001, "用户未启用"),
     USER_LOCKED(50001002, "用户被锁定"),
     USER_TOKEN_INVALID(50001003, "Token过期或失效,请重新登录"),
-    FILE_NOT_FOUND(50002001, "文件不存在");
+    FILE_NOT_FOUND(50002001, "文件不存在"),
+    BLOG_NOT_FOUND(50003001, "该博客不存在");
 
     private final Integer code;
 

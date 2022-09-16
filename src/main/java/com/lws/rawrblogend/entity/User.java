@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -27,7 +28,7 @@ public class User extends BaseEntity implements UserDetails {
     // 该账号是否启动
     private Boolean enabledSymbol = true;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private File avatar;
 
     @Override

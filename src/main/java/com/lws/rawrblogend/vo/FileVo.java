@@ -6,12 +6,12 @@ import com.lws.rawrblogend.enums.Storage;
 import lombok.Data;
 
 @Data
-public class FileVo {
+public class FileVo extends BaseVo {
 
     private String name;
 
     private String ext;
-    
+
     // 文件上传到oss后返回的url值
     private String uri;
 
@@ -22,5 +22,6 @@ public class FileVo {
     private FileType type;
 
     private FileStatus status;
+
 
 }
