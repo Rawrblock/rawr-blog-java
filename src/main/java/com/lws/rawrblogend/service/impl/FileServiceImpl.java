@@ -42,8 +42,9 @@ public class FileServiceImpl implements FileService {
         file.setStatus(FileStatus.UPLOADED);
         // 保存文件的访问地址
         file.setUri(fileFinishUpload.getFileUri());
+        File saved = fileMapper.updateEntity(file, fileFinishUpload);
         // 保存文件
-        File savedFile = fileRepository.save(file);
+        File savedFile = fileRepository.save(saved);
         return fileMapper.toDto(savedFile);
     }
 

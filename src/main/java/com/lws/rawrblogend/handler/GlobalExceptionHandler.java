@@ -25,9 +25,9 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setCode(e.getCode());
         errorResponse.setMessage(e.getMessage());
-        errorResponse.setTrace(e.getStackTrace());
-        e.printStackTrace();
+//        errorResponse.setTrace(e.getStackTrace());
         log.error(e.getMessage());
+        e.printStackTrace();
         return errorResponse;
     }
 

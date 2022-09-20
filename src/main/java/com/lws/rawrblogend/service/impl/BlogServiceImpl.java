@@ -60,6 +60,21 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.toDto(blogRepository.save(saved));
     }
 
+    @Override
+    public void delete(String id) {
+        Blog blog = getBlogById(id);
+        blog.setStatus(BlogStatus.CLOSED);
+        blogRepository.save(blog);
+    }
+
+    private Blog getBlogById(String id) {
+        Optional<Blog> blog = blogRepository.findById(id);
+        if (!blog.isPresent()) {
+            throw new BizException(ExceptionType.BLOG_NOT_FOUND);
+        }
+        return blog.get();
+    }
+
     @Autowired
     public void setBlogMapper(BlogMapper blogMapper) {
         this.blogMapper = blogMapper;

@@ -30,6 +30,11 @@ public class BlogController {
         return blogMapper.toVo(blogService.update(id, blogCreateOrUpdateRequest));
     }
 
+    @PostMapping("/delete/{id}")
+    public void delete(@PathVariable String id) {
+        blogService.delete(id);
+    }
+
     @GetMapping("/")
     public List<BlogVo> list(BlogPageNumber blogPageNumber) {
         List<BlogDto> blogs = blogService.getAllBlogs(blogPageNumber);

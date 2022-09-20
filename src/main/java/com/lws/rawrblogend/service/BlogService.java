@@ -15,4 +15,6 @@ public interface BlogService {
     BlogDto update(String id, BlogCreateOrUpdateRequest blogCreateOrUpdateRequest);
 
     BlogDto getBlog(String id);
+
+    void delete(String id);
 }

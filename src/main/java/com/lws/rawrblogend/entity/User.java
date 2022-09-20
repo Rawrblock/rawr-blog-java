@@ -28,7 +28,7 @@ public class User extends BaseEntity implements UserDetails {
     // 该账号是否启动
     private Boolean enabledSymbol = true;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.REFRESH)
     private File avatar;
 
     @Override
