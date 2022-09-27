@@ -20,13 +20,11 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setHeader("Cache-Control", "no-cache");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
         ErrorResponse errorResponse = new ErrorResponse();
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setCode(ExceptionType.USER_TOKEN_INVALID.getCode());
         errorResponse.setMessage(ExceptionType.USER_TOKEN_INVALID.getMessage());
-
-
         response.getWriter().println(JSONUtil.parse(errorResponse));
         response.getWriter().flush();
 

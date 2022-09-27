@@ -19,6 +19,8 @@ public class FileDto {
 
     private Long size;
 
+    private String belong;
+
     private FileType type;
 
     private Storage storage;

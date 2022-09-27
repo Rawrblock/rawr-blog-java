@@ -18,8 +18,10 @@ public class FileVo extends BaseVo {
     private Storage storage;
 
     private Long size;
-
+    
     private FileType type;
+
+    private String belong;
 
     private FileStatus status;
 

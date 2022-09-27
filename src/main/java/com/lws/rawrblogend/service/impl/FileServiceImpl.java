@@ -18,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -53,17 +55,33 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public FileStorageUploadDto initUpload(FileUploadRequest fileUploadRequest) {
-        // 1. 将前端上传后的文件信息 转换为 数据库文件
-        File file = fileMapper.createEntity(fileUploadRequest);
-        // 2. 手动补充信息
-        file.setType(FileTypeTransformer.getFileTypeFromExt(fileUploadRequest.getExt()));
-        file.setStorage(getDefaultStorage());
-        // 3. 将该文件信息保存到数据库(后续访问)
-        File savedFile = fileRepository.save(file);
-        // 4. 获取 stsToken临时上传凭证
-        FileStorageUploadDto fileStorageUploadDto = fileStorageServices.initFileUpload();
-        fileStorageUploadDto.setFileId(savedFile.getId());
-        return fileStorageUploadDto;
+        // 判断文件是否已经存在
+        Optional<File> oldFile = fileRepository.findByNameAndExtAndSize(fileUploadRequest.getName(), fileUploadRequest.getExt(), fileUploadRequest.getSize());
+        if (oldFile.isPresent()) {
+            // 当数据库存在该文件,直接获取stsToken返回给前端
+            FileStorageUploadDto fileStorageUploadDto = fileStorageServices.initFileUpload();
+            fileStorageUploadDto.setFileId(oldFile.get().getId());
+            return fileStorageUploadDto;
+        } else {
+            // 1. 将前端上传后的文件信息 转换为 数据库文件
+            File file = fileMapper.createEntity(fileUploadRequest);
+            // 2. 手动补充信息
+            file.setType(FileTypeTransformer.getFileTypeFromExt(fileUploadRequest.getExt()));
+            file.setStorage(getDefaultStorage());
+            // 3. 将该文件信息保存到数据库(后续访问)
+            File savedFile = fileRepository.save(file);
+            // 4. 获取 stsToken临时上传凭证
+            FileStorageUploadDto fileStorageUploadDto = fileStorageServices.initFileUpload();
+            fileStorageUploadDto.setFileId(savedFile.getId());
+            return fileStorageUploadDto;
+        }
+    }
+
+    @Override
+    public List<FileDto> getDefaultFile() {
+        List<File> files = fileRepository.findByType();
+        List<FileDto> list = files.stream().map(fileMapper::toDto).collect(Collectors.toList());
+        return list;
     }
 
     // 后台设置默认的上传方式

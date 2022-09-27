@@ -20,7 +20,7 @@ public class UserController {
     UserMapper userMapper;
 
     // 用户创建
-    @PostMapping
+    @PostMapping("/")
     public UserVo create(@Validated @RequestBody UserCreateRequest userCreateRequest) {
         return userMapper.toVo(userService.create(userCreateRequest));
     }

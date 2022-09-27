@@ -12,13 +12,13 @@ public class UserCreateRequest {
     @Size(min = 4, max = 64, message = "用户名应该在4个字符到64个字符之间")
     private String name;
 
-    @NotBlank(message = "邮箱不能为空")
+    //    @NotBlank(message = "邮箱不能为空")
     private String email;
 
-    @NotBlank(message = "密码不能为空")
-    @Size(min = 4, max = 64, message = "密码应该在4个字符到64个字符之间")
+    //    @NotBlank(message = "密码不能为空")
+//    @Size(min = 4, max = 64, message = "密码应该在4个字符到64个字符之间")
     private String password;
-    
+
     private FileDto avatar;
 
 }

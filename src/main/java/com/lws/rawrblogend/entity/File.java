@@ -1,5 +1,6 @@
 package com.lws.rawrblogend.entity;
 
+import com.lws.rawrblogend.enums.FileBelong;
 import com.lws.rawrblogend.enums.FileStatus;
 import com.lws.rawrblogend.enums.FileType;
 import com.lws.rawrblogend.enums.Storage;
@@ -17,9 +18,12 @@ public class File extends BaseEntity {
 
     private String ext; // 文件后缀
 
-    private Integer size; // 文件大小
+    private Long size; // 文件大小
 
     private String uri;
+
+    @Enumerated(EnumType.STRING)
+    private FileBelong belong; // 设置该文件属于那种模块图片
 
     @Enumerated(EnumType.STRING)
     private FileType type; // 文件类型

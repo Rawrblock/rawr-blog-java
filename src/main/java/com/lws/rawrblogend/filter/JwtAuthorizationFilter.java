@@ -7,8 +7,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lws.rawrblogend.config.SecurityConfig;
 import com.lws.rawrblogend.entity.User;
-import com.lws.rawrblogend.exception.BizException;
-import com.lws.rawrblogend.exception.ExceptionType;
 import com.lws.rawrblogend.service.UserService;
 import com.lws.rawrblogend.utils.RedisUtils;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -49,29 +47,36 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 解析Token
         String email;
         try {
+            // 1. 校验Token
             JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC512(SecurityConfig.SECRET.getBytes())).build();
-            // 分割出token
             String token = header.replace(SecurityConfig.TOKEN_PREFIX, "");
             DecodedJWT decodedJWT = jwtVerifier.verify(token);
             email = decodedJWT.getSubject();
+            // 3. Token没过期，判断redis中是否存在数据
+            String redisUser = redisUtils.getCacheObject(email);
+            User user = JSONUtil.toBean(redisUser, User.class);
+            // 当token没有过期,从redis中获取出用户数据返回
+            if (Objects.isNull(user)) {
+                // 没有数据时，就从mysql中
+                User sqlUser = userService.loadUserByUsername(email);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null, sqlUser.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } else {
+                // 如果redis中存在数据
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+            chain.doFilter(request, response);
+
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new BizException(ExceptionType.USER_TOKEN_INVALID);
+            // 2. 当Token过期
+            chain.doFilter(request, response);
+            return;
         }
 
-        // 当token没有过期,从redis中获取出用户数据返回
-        String redisUser = redisUtils.getCacheObject(email);
-        User user = JSONUtil.toBean(redisUser, User.class);
-        if (Objects.isNull(user)) {
-            // 没有数据时
-            throw new BizException(ExceptionType.UNAUTHORIZED);
-        }
 
         // 通过用户名获取用户信息
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, null, user.getAuthorities());
         // 将解析出来的当前用户信息存入上下文，后期登录成功 token校验成功可以直接获取返回
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        chain.doFilter(request, response);
     }
 
     // 验证JWT token 根据header构建新的Authenticatio

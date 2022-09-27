@@ -1,6 +1,5 @@
 package com.lws.rawrblogend.handler;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.lws.rawrblogend.exception.BizException;
 import com.lws.rawrblogend.exception.ErrorResponse;
 import com.lws.rawrblogend.exception.ExceptionType;
@@ -25,7 +24,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setCode(e.getCode());
         errorResponse.setMessage(e.getMessage());
-//        errorResponse.setTrace(e.getStackTrace());
+        errorResponse.setTrace(e.getStackTrace());
         log.error(e.getMessage());
         e.printStackTrace();
         return errorResponse;
@@ -54,23 +53,11 @@ public class GlobalExceptionHandler {
         return errorResponse;
     }
 
-    @ExceptionHandler(value = TokenExpiredException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse TokenExpiredHandler(TokenExpiredException e) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode(ExceptionType.USER_TOKEN_INVALID.getCode());
-        errorResponse.setMessage(ExceptionType.USER_TOKEN_INVALID.getMessage());
-        e.printStackTrace();
-        log.error(e.getMessage());
-        return errorResponse;
-    }
-
     // 捕捉 校验错误时的返回 400
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public List<ErrorResponse> bizExceptionHandler(MethodArgumentNotValidException e) {
         List<ErrorResponse> errorResponses = new ArrayList<ErrorResponse>();
-        e.printStackTrace();
 
         e.getBindingResult().getAllErrors().forEach((error) -> {
             ErrorResponse errorResponse = new ErrorResponse();

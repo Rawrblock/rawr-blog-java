@@ -6,6 +6,7 @@ CREATE TABLE file
     `size`         INT         DEFAULT 0           NOT NULL COMMENT '文件大小; 单位byte',
     `type`         VARCHAR(32) DEFAULT 'OTHER'     NOT NULL COMMENT '文件类型, AUDIO-音频;IMAGE-图片;VIDEO-视频;OTHER-其他',
     `uri`          VARCHAR(255) COMMENT '文件访问地址',
+    `belong`       VARCHAR(32) COMMENT '文件属于模块,HEADER_COVER-首页封面图片;BLOG_COVER-博客页封面图片;LOGIN_COVER-登录页面',
     `storage`      VARCHAR(16) DEFAULT 'COS'       NOT NULL COMMENT '存储供应商, COS-腾讯云存储;OSS-阿里云存储',
     `status`       VARCHAR(32) DEFAULT 'UPLOADING' NOT NULL COMMENT '文件状态, UPLOADING-上传中;UPLOADED-已上传;CANCEL-已取消',
     `created_time` datetime(6) NOT NULL COMMENT '创建时间',
