@@ -2,6 +2,8 @@ package com.lws.rawrblogend.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserDto {
 
@@ -15,5 +17,7 @@ public class UserDto {
     private String password;
 
     private FileDto avatar;
+
+    private List<RoleDto> roles;
 
 }
