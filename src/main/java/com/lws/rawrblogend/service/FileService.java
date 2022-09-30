@@ -17,4 +17,7 @@ public interface FileService {
 
     // 获取默认封面图片
     List<FileDto> getDefaultFile();
+
+    // 删除文件通过ID
+    Boolean deleteFileById(String id);
 }

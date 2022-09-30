@@ -11,6 +11,8 @@ public interface FileRepository extends JpaRepository<File, String> {
 
     Optional<File> findById(String id);
 
+    void deleteById(String id);
+
     // 查询默认封面图片
     @Query("from File file where file.type='DEFAULT_IMAGE' ORDER BY file.createdTime DESC")
     List<File> findByType();

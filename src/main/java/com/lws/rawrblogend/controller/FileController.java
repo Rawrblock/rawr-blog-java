@@ -34,10 +34,21 @@ public class FileController {
         return fileMapper.toVo(fileService.finishUpload(fileFinishUpload));
     }
 
+    // 获取文件url
     @GetMapping("/")
     public List<FileVo> getDefaultFile() {
         List<FileDto> files = fileService.getDefaultFile();
         return files.stream().map(fileMapper::toVo).collect(Collectors.toList());
+    }
+
+    // 删除数据库文件通过ID
+    @DeleteMapping("/{id}")
+    public String deleteFile(@PathVariable String id) {
+        Boolean result = fileService.deleteFileById(id);
+        if (!result) {
+            return "删除失败,请重试!";
+        }
+        return "删除成功!";
     }
 
     @Autowired

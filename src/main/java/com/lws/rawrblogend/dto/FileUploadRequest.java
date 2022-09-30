@@ -15,7 +15,7 @@ public class FileUploadRequest {
     // 上传文件大小
     private Long size;
 
-    // 文件后缀
+    // 文件后缀.
     @NotBlank(message = "后缀不能为空")
     private String ext;
 

@@ -84,6 +84,17 @@ public class FileServiceImpl implements FileService {
         return list;
     }
 
+    // 删除文件通过ID
+    @Override
+    public Boolean deleteFileById(String id) {
+        Optional<File> oldFile = fileRepository.findById(id);
+        if (!oldFile.isPresent()) {
+            return false;
+        }
+        fileRepository.deleteById(id);
+        return true;
+    }
+
     // 后台设置默认的上传方式
     public Storage getDefaultStorage() {
         return Storage.OSS;
